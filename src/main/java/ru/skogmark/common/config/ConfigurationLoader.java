@@ -3,35 +3,38 @@ package ru.skogmark.common.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.annotation.Nonnull;
 import java.io.*;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author svip
- *         2016-12-17
+ * 2016-12-17
  */
-public class ConfigurationFactory {
+public class ConfigurationLoader {
     private static final String EXTERNAL_CONFIG_DIRECTORY_PATH = "/../conf";
 
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationLoader.class);
 
     private final String executionPath;
+    private final ConfigurationSerializer configurationSerializer;
 
-    public ConfigurationFactory() {
-        this.executionPath = System.getProperty("user.dir");
+    ConfigurationLoader(@Nonnull ConfigurationSerializer configurationSerializer) {
+        this(System.getProperty("user.dir"), configurationSerializer);
     }
 
-    public ConfigurationFactory(String executionPath) {
-        this.executionPath = executionPath;
+    ConfigurationLoader(@Nonnull String executionPath,
+                        @Nonnull ConfigurationSerializer configurationSerializer) {
+        this.executionPath = requireNonNull(executionPath, "executionPath");
+        this.configurationSerializer = requireNonNull(configurationSerializer, "configurationSerializer");
     }
 
     public <T> T loadConfiguration(Class<T> configClass, String configFileName) {
         log.debug("Loading configuration for " + configClass);
         try {
             try (InputStream configFileInputStream = getConfigFileInputStream(configFileName)) {
-                return unmarshalConfig(configClass, configFileInputStream);
+                return configurationSerializer.deserialize(configClass, configFileInputStream);
             }
         } catch (IOException e) {
             throw new ConfigurationLoadingException(
@@ -47,7 +50,7 @@ public class ConfigurationFactory {
                 return new FileInputStream(externalConfigFile);
             } else {
                 log.debug("Loading config from resources");
-                return Thread.currentThread().getContextClassLoader().getResourceAsStream(configFileName);
+                return getClass().getResourceAsStream(configFileName);
             }
         } catch (FileNotFoundException e) {
             throw new ConfigurationLoadingException("Unable to resolve file " + configFileName, e);
@@ -60,17 +63,5 @@ public class ConfigurationFactory {
             return configLocation;
         }
         return executionPath + EXTERNAL_CONFIG_DIRECTORY_PATH;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T unmarshalConfig(Class<T> configClass, InputStream configFileInputStream) {
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(configClass);
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-            return (T) unmarshaller.unmarshal(configFileInputStream);
-        } catch (JAXBException e) {
-            throw new ConfigurationLoadingException("Failure to load configuration for " + configClass, e);
-        }
     }
 }
