@@ -1,0 +1,1 @@
+create table if not exists test0 (id bigserial primary key, name varchar(128) not null);

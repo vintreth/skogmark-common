@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>skogmark-common</artifactId>
-  <version>1.4</version>
+  <version>1.4.1</version>
   <name>Skogmark-Common</name>
   <dependencies>
     <!-- Jackson -->
@@ -27,6 +27,10 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.databind.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
   </dependencies>
 </project>
