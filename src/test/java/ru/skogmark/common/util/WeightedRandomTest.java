@@ -61,7 +61,7 @@ public class WeightedRandomTest {
 
     private Map<Integer, Integer> doRandomPicking(float[] weights) {
         Map<Integer, Integer> results = new HashMap<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             Integer index = weightedRandom.pick(weights);
             if (!results.containsKey(index)) {
                 results.put(index, 1);
