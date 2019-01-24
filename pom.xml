@@ -5,11 +5,11 @@
   <parent>
     <artifactId>skogmark-parent-pom</artifactId>
     <groupId>ru.skogmark</groupId>
-    <version>1.4</version>
+    <version>1.5.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>skogmark-common</artifactId>
-  <version>1.5.1</version>
+  <version>1.5.2-SNAPSHOT</version>
   <name>Skogmark-Common</name>
   <dependencies>
     <!-- Jackson -->
@@ -31,6 +31,10 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
     </dependency>
   </dependencies>
 </project>
