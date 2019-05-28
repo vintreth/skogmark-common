@@ -2,6 +2,7 @@ package ru.skogmark.common.migration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -9,7 +10,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ import java.util.Set;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
-public class MigrationService {
+public class MigrationService implements InitializingBean {
     private static final Logger log = LoggerFactory.getLogger(MigrationService.class);
 
     private final TransactionTemplate transactionTemplate;
@@ -38,8 +38,8 @@ public class MigrationService {
                 : Collections.emptySet();
     }
 
-    @PostConstruct
-    public void applyMigrations() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
         log.info("Starting applying migrations to database");
         migrationResources.forEach(this::migrate);
         log.info("Migrations finished");
