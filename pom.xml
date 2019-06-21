@@ -5,11 +5,11 @@
   <parent>
     <artifactId>skogmark-parent-pom</artifactId>
     <groupId>ru.skogmark</groupId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.6.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>skogmark-common</artifactId>
-  <version>1.5.2-SNAPSHOT</version>
+  <version>1.5.3-SNAPSHOT</version>
   <properties>
     <jaxb.version>2.3.0</jaxb.version>
   </properties>
